@@ -2,7 +2,7 @@
 title: 测试写文章
 date: 2019-03-17 15:50:09
 tags:
-categories: "test"
+categories: "测试"
 ---
 # 这是题目
 ---

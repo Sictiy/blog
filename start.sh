@@ -1,2 +1,2 @@
 #!/bin/bash
-hexo server -p 80 > ./log 2>&1 &
+hexo server > ./log 2>&1 &
