@@ -67,7 +67,7 @@ categories: "配置"
 ---
 启动nginx
 ``systemctl restart nginx ``
-启动失败，查看logs文件，发现不存在目录:/var/data/
+启动失败，查看logs文件(文件位置可在nginx.conf中查看)，发现不存在目录:/var/data/
 ``mkdir /var/data``
 再次启动，看起来很正常。通过网址进入发现无法进去，提示5000。查看logs，有如下提示：
 ``*1012 socket() failed (24: Too many open files) while connecting to upstream, client: 127.0.0.1, server: www.sictiyleon.xyz, request: "GET / HTTP/1.0", upstream: "http://127.0.0.1:80/", host: "www.sictiyleon.xyz" ``
