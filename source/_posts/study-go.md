@@ -1,13 +1,9 @@
 ---
-title: go简要笔记
-date: 2019-04-08 12:00:00
-tags:
-categories:
+title: go学习笔记
+date: 2019-04-08 18:09:58
+tags: 
+categories: 
 ---
-
-# go学习笔记
-
-记录一下简单学习go语言的过程。
 
 ## 环境
 
