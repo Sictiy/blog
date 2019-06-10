@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>go学习笔记 | SictiyLeon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="环境  windows + goland 官网下载go、goland 安装后在goland中 settings-&amp;gt;go-&amp;gt;goroot gopath 设置环境变量   导入第三方包 go get -u github.com/golang/protobuf/protoc-gen-go (protobuf) go get -u github.com/google/flatbuffers/g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go学习笔记">
+<meta property="og:url" content="http://yoursite.com/2019/04/08/study-go/index.html">
+<meta property="og:site_name" content="SictiyLeon">
+<meta property="og:description" content="环境  windows + goland 官网下载go、goland 安装后在goland中 settings-&amp;gt;go-&amp;gt;goroot gopath 设置环境变量   导入第三方包 go get -u github.com/golang/protobuf/protoc-gen-go (protobuf) go get -u github.com/google/flatbuffers/g">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-08T10:30:15.987Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go学习笔记">
+<meta name="twitter:description" content="环境  windows + goland 官网下载go、goland 安装后在goland中 settings-&amp;gt;go-&amp;gt;goroot gopath 设置环境变量   导入第三方包 go get -u github.com/golang/protobuf/protoc-gen-go (protobuf) go get -u github.com/google/flatbuffers/g">
+  
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+</html>
+<body style="
+
+
+  background-color: #eff0f6
+
+">
+  <div id="container">
+    <nav id="nav">
+  <header class="header">
+    <a href="/" class="title">SictiyLeon</a>
+  </header>
+  <div class="ctnWrap">
+    <div class="icons">
+      
+        
+          
+            <a href="https://github.com/Sictiy" target="_blank" class="nav-icn iconfont icon-github"></a>
+          
+        
+          
+            <a href="https://www.instagram.com/sictiy/" target="_blank" class="nav-icn iconfont icon-instagram"></a>
+          
+        
+          
+            <a href="https://www.facebook.com/xml.xml.75" target="_blank" class="nav-icn iconfont icon-facebook"></a>
+          
+        
+      
+    </div>
+    <div class="menu">
+      
+        
+            <a href="/" class="nav-menu ">HOME</a>
+          
+        
+            <a href="/archives" class="nav-menu ">ARCHIVE</a>
+          
+        
+            <a href="/categories" class="nav-menu ">CATEGORIES</a>
+          
+        
+            <a href="/about" class="nav-menu ">ABOUT</a>
+          
+        
+      
+    </div>
+  </div>
+</nav>
+    <div id="main"><section class="article">
+  <h2 class="title">go学习笔记</h2>
+  <p class="sub">Apr 8, 2019</p>
+  <article class="content">
+    <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><hr>
+<ul>
+<li>windows + goland<ul>
+<li>官网下载go、goland</li>
+<li>安装后在goland中 settings-&gt;go-&gt;goroot gopath 设置环境变量</li>
+</ul>
+</li>
+<li>导入第三方包<ul>
+<li>go get -u github.com/golang/protobuf/protoc-gen-go (protobuf)</li>
+<li>go get -u github.com/google/flatbuffers/go (flatbuffer)</li>
+</ul>
+</li>
+</ul>
+<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><hr>
+<ul>
+<li>基本结构<ul>
+<li>package 当前包</li>
+<li>import 导入包 (不允许循环导包，如a import b、b import a，设计包时需确定每个包的作用，包与包之间低耦合)</li>
+</ul>
+</li>
+<li><p>基本语法</p>
+<ul>
+<li><p>函数与方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">func</span> <span class="params">(this* StructName)</span> <span class="title">functionName</span><span class="params">(paramLists ...)</span> <span class="title">returnList</span> ...</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line">\\ 关键字 (接受者) 函数名 (参数列表) 返回值列表 &#123; 函数体&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>变量与初始化：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> varName <span class="keyword">uint32</span></span><br><span class="line">varName := <span class="number">21</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>常量：const</p>
+</li>
+<li>数据结构初始化： make()</li>
+<li>可见性： 首字母大写pulic， 小写private</li>
+<li>指针与实例：与c++相似，但都通过点访问成员</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><hr>
+<ul>
+<li>数组：定长</li>
+<li>切片：不定长，需要</li>
+<li>map</li>
+<li>range：主要用在for循环中</li>
+<li>结构体指针与数组指针转换：</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pBytes := (*[size]<span class="keyword">byte</span>)(unsafe.Pointer(&amp;myStruct))</span><br></pre></td></tr></table></figure>
+<h2 id="接口与类"><a href="#接口与类" class="headerlink" title="接口与类"></a>接口与类</h2><hr>
+<ul>
+<li><p>类与实例</p>
+<ul>
+<li>类用struct实现</li>
+<li>没有继承，只有组合，类似于继承：</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> extendStruct <span class="keyword">struct</span>&#123;</span><br><span class="line">    baseStruct</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>类方法需要修改类成员时，方法接收者需要是指针</li>
+</ul>
+</li>
+<li><p>接口</p>
+<ul>
+<li>interface , 通过实现接口中的方法实现接口，不显式通过关键字声明实现</li>
+</ul>
+</li>
+<li><p>类与接口指针</p>
+<ul>
+<li>结构的方法集只包含接收者为结构类型的方法，结构体指针的方法集同时包含接受者为结构体类型与结构体指针类型的方法</li>
+<li>结构体的方法，只能通过结构体指针访问，但是如果结构是可被寻址的，那通过结构体访问方式将转化为通过结构体指针访问</li>
+<li>接口的内部实现为type加value，type为value的类型，value为结构体指针。所以通过接口访问方法实际就是通过结构体指针访问</li>
+<li>接口判等：需要type与value都相等，value通过指针对于的地址的值判断</li>
+<li>接口内的指针可以直接与对于的结构体指针判等</li>
+</ul>
+</li>
+</ul>
+<h2 id="协程与chan"><a href="#协程与chan" class="headerlink" title="协程与chan"></a>协程与chan</h2><hr>
+<ul>
+<li><p>基本用法</p>
+<ul>
+<li>go func 新建一个协程运行函数func，运行完func后协程结束</li>
+<li>var myChan chan type 一个可传输type的管道</li>
+<li>&lt;- myChan 从myChan中读取一个值，如果myChan未写入过值则阻塞</li>
+<li>myChan &lt;- 写入一个值到myChan，如果myChan空间不足（上个写入的值未被读取）则阻塞</li>
+<li>chan&lt;- chan&lt;- int &lt;-符号优先和左边的结合</li>
+<li>chan type 需要make后使用，可通过make(chan type, size) 指定容量</li>
+</ul>
+</li>
+<li><p>select语句：从所有case语句中的chan中读取一个值，都不能读取则阻塞</p>
+<ul>
+<li>可以使用time.after()设置超时，该函数返回一个 &lt;-chan Time 类型的变量，一定时间后该管道可读</li>
+<li>ticker 定时触发器，以一定间隔往chan中写入值</li>
+</ul>
+</li>
+<li><p>range遍历chan：不断从chan中读，直到chan关闭</p>
+</li>
+</ul>
+<h2 id="错误与异常"><a href="#错误与异常" class="headerlink" title="错误与异常"></a>错误与异常</h2><hr>
+<ul>
+<li><p>错误与异常</p>
+<ul>
+<li>错误是程序的一部分，异常不是</li>
+<li>有错误时程序正常运行，相当于操作的错误码，逐层返回直到被处理即可</li>
+<li>异常标志着程序运行在非正常状态，需要特殊处理</li>
+</ul>
+</li>
+<li><p>错误处理</p>
+<ul>
+<li>将错误放在返回值的最后返回，由调用方判断是否有出错</li>
+</ul>
+</li>
+<li><p>异常处理</p>
+<ul>
+<li>defer 类似于trycatch中的final，会在函数执行完之后马上调用，可以再defer函数中写资源释放代码，存在多个defer时，按程序执行顺序的反顺序执行</li>
+<li>panic 程序运行到panic说明程序异常，当前函数马上停止执行，如果有defer函数，则执行defer</li>
+<li>recover 恢复函数，go中用于处理panic的函数，recover的返回值未panic的传入值，如果panic不被处理将网上转递，如果一直不被处理，程序将停止运行</li>
+</ul>
+</li>
+</ul>
+<h2 id="包管理"><a href="#包管理" class="headerlink" title="包管理"></a>包管理</h2><hr>
+<ul>
+<li>待更新…</li>
+</ul>
+
+  </article>
+  <footer class="f-cf">
+    
+      <a href="/2019/04/18/idea插件开发记录/" class="link f-fl">⟵Idea插件开发记录</a>
+    
+    
+      <a href="/2019/03/19/NOMINMAX问题/" class="link f-fr">NOMINMAX问题⟶</a>
+    
+  </footer>
+</section></div>
+    <footer id="footer" class="f-cf">
+  xlm10600@gmail.com
+  
+    
+      
+        · <a href="https://github.com/Sictiy" target="_blank" class="nav-icn">GitHub</a>
+      
+    
+      
+        · <a href="https://www.instagram.com/sictiy/" target="_blank" class="nav-icn">Instagram</a>
+      
+    
+      
+        · <a href="https://www.facebook.com/xml.xml.75" target="_blank" class="nav-icn">Facebook</a>
+      
+    
+  
+
+  <span class="copyright">All rights reserved @Sictiy Xu</span>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">&nbsp;&nbsp;访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+</footer>
+
+  </div>
+</body>
+</html>

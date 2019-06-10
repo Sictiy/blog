@@ -4,8 +4,8 @@ date: 2019-03-17 21:00:00
 categories: "配置"
 ---
 
-# 申请ssl证书
----
+## 申请ssl证书
+
 - 申请腾讯的免费ssl证书
   - 点击[腾讯云免费ssl证书](https://www.qcloud.com/login)
   - 申请成功后查看证书相关参数
@@ -16,19 +16,32 @@ categories: "配置"
   - 一段时间以后收到邮件提示验证通过
   - 此时回到申请ssl的网站，可以下载ssl证书
 
-# 编译安装
----
-环境为 centos7，可以直接yum安装nginx
-``sudo yum install nginx``
-将上一步下载的ssl文件移动到nginx配置目录下方便配置
-``mv 1_www.sictiyleon.xyz_bundle.crt /etc/nginx/ssl/``
+## 编译安装
 
-# nginx配置
----
+环境为 centos7，可以直接yum安装nginx
+
+```shell
+sudo yum install nginx
+```
+
+将上一步下载的ssl文件移动到nginx配置目录下方便配置
+
+```shell
+mv 1_www.sictiyleon.xyz_bundle.crt /etc/nginx/ssl/
+```
+
+## nginx配置
+
 新建配置文件
-``vim /etc/nginx/conf.d/www.sictiyleon.xyz``
+
+```shell
+vim /etc/nginx/conf.d/www.sictiyleon.xyz
+```
+
 主要内容为：
-``` server {
+
+```text
+server {
     listen 80;
     listen 443 ssl;
     server_name www.sictiyleon.xyz;
@@ -61,18 +74,41 @@ categories: "配置"
 
         proxy_pass http://127.0.0.1:4000;
     }
-}```
+}
+```
 
-# 启动nginx
----
+## 启动nginx
+
 启动nginx
-``systemctl restart nginx ``
-启动失败，查看logs文件(文件位置可在nginx.conf中查看)，发现不存在目录:/var/data/
-``mkdir /var/data``
+
+```shell
+systemctl restart nginx
+```
+
+启动失败，查看logs文件，发现不存在目录:/var/data/
+
+```shell
+mkdir /var/data
+```
+
 再次启动，看起来很正常。通过网址进入发现无法进去，提示5000。查看logs，有如下提示：
-``*1012 socket() failed (24: Too many open files) while connecting to upstream, client: 127.0.0.1, server: www.sictiyleon.xyz, request: "GET / HTTP/1.0", upstream: "http://127.0.0.1:80/", host: "www.sictiyleon.xyz" ``
+
+```text
+*1012 socket() failed (24: Too many open files) while connecting to upstream, client: 127.0.0.1, server: www.sictiyleon.xyz, request: "GET / HTTP/1.0", upstream: "http://127.0.0.1:80/", host: "www.sictiyleon.xyz"
+```
+
 google以后得知是因为开启了selinux，于是临时关闭检验：
-``setenforce 0``
+
+```shell
+setenforce 0
+```
+
 再次重启nginx后可顺利通过https进入网页。
+5-20更新，关闭selinux治标不治本，可通过如下命令解决：
+
+```shell
+cat /var/log/audit/audit.log |grep nginx |grep denied| audit2allow -M mynginx
+semodule -i mynginx.pp
+```
 
 完。
