@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>炮弹挖坑问题 | SictiyLeon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="炮弹挖坑流程 炮弹打在地图上，产生一定形状的弹坑。 地图和弹坑形状都为二进制数据，一个byte共8位，每一位表示一个像素点，代表改像素点是否为空点。 整个地图的数据为一个byte数组，xy坐标系下x0,y0 点的数据，保存在byte数组的第 y0 * wight + x / 8 个byte中，具体为该byte的第 x % 8 位。其中wight为整个地图一横排的所有点的byte的数量。 炮弹打在地">
+<meta property="og:type" content="article">
+<meta property="og:title" content="炮弹挖坑问题">
+<meta property="og:url" content="http://yoursite.com/2019/09/20/dig/index.html">
+<meta property="og:site_name" content="SictiyLeon">
+<meta property="og:description" content="炮弹挖坑流程 炮弹打在地图上，产生一定形状的弹坑。 地图和弹坑形状都为二进制数据，一个byte共8位，每一位表示一个像素点，代表改像素点是否为空点。 整个地图的数据为一个byte数组，xy坐标系下x0,y0 点的数据，保存在byte数组的第 y0 * wight + x / 8 个byte中，具体为该byte的第 x % 8 位。其中wight为整个地图一横排的所有点的byte的数量。 炮弹打在地">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-20T09:48:27.983Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="炮弹挖坑问题">
+<meta name="twitter:description" content="炮弹挖坑流程 炮弹打在地图上，产生一定形状的弹坑。 地图和弹坑形状都为二进制数据，一个byte共8位，每一位表示一个像素点，代表改像素点是否为空点。 整个地图的数据为一个byte数组，xy坐标系下x0,y0 点的数据，保存在byte数组的第 y0 * wight + x / 8 个byte中，具体为该byte的第 x % 8 位。其中wight为整个地图一横排的所有点的byte的数量。 炮弹打在地">
+  
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+</html>
+<body style="
+
+
+  background-color: #eff0f6
+
+">
+  <div id="container">
+    <nav id="nav">
+  <header class="header">
+    <a href="/" class="title">SictiyLeon</a>
+  </header>
+  <div class="ctnWrap">
+    <div class="icons">
+      
+        
+          
+            <a href="https://github.com/Sictiy" target="_blank" class="nav-icn iconfont icon-github"></a>
+          
+        
+          
+            <a href="https://www.instagram.com/sictiy/" target="_blank" class="nav-icn iconfont icon-instagram"></a>
+          
+        
+          
+            <a href="https://www.facebook.com/xml.xml.75" target="_blank" class="nav-icn iconfont icon-facebook"></a>
+          
+        
+      
+    </div>
+    <div class="menu">
+      
+        
+            <a href="/" class="nav-menu ">HOME</a>
+          
+        
+            <a href="/archives" class="nav-menu ">ARCHIVE</a>
+          
+        
+            <a href="/categories" class="nav-menu ">CATEGORIES</a>
+          
+        
+            <a href="/about" class="nav-menu ">ABOUT</a>
+          
+        
+      
+    </div>
+  </div>
+</nav>
+    <div id="main"><section class="article">
+  <h2 class="title">炮弹挖坑问题</h2>
+  <p class="sub">Sep 20, 2019</p>
+  <article class="content">
+    <h2 id="炮弹挖坑流程"><a href="#炮弹挖坑流程" class="headerlink" title="炮弹挖坑流程"></a>炮弹挖坑流程</h2><ul>
+<li>炮弹打在地图上，产生一定形状的弹坑。</li>
+<li>地图和弹坑形状都为二进制数据，一个byte共8位，每一位表示一个像素点，代表改像素点是否为空点。</li>
+<li>整个地图的数据为一个byte数组，xy坐标系下x0,y0 点的数据，保存在byte数组的第 y0 * wight + x / 8 个byte中，具体为该byte的第 x % 8 位。其中wight为整个地图一横排的所有点的byte的数量。</li>
+<li>炮弹打在地图上，在击中点生成一个弹坑数据，弹坑数据与地图数据在地图坐标系下求交集，再在地图数据中，减去交集中的实心点，就可以得到挖坑后的地图数据。</li>
+</ul>
+<h2 id="地图数据减去弹坑数据流程"><a href="#地图数据减去弹坑数据流程" class="headerlink" title="地图数据减去弹坑数据流程"></a>地图数据减去弹坑数据流程</h2><ul>
+<li><p>按行移除</p>
+<ul>
+<li>按y 遍历所有行，每一行取出地图数据与弹坑数据，每一行计算交集矩形宽度范围内的像素点。</li>
+<li>根据地图数据起始点的x值，计算该byte需要计算的位数。</li>
+<li>根据弹坑数据起始点的x值，计算该byte拥有的位数，对两个byte进行左右移动，使起始位的偏移值相同。</li>
+<li>如果弹坑数据该byte拥有的位数不够，则取下一个byte的前几位，使弹坑的位数等于需要计算的位数。</li>
+<li>然后将弹坑byte取反，并与上地图byte求出该地图byte计算后的byte值</li>
+</ul>
+</li>
+<li><p>按像素移除</p>
+<ul>
+<li>按x，按y，遍历所有xy像素点，如果地图可挖，弹坑为实心，则把改地图像素置为空</li>
+</ul>
+</li>
+</ul>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>偶尔会出现弹坑左边边界处有多挖的情况。也就是说取弹坑byte的时候，会出现多余的1。</li>
+</ul>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><ul>
+<li>断点跟踪后发现，-32 右移 7位后变成了-1,-32的二进制表示为：11100000, -1二进制表示为11111111。</li>
+<li>查找资料后发现&gt;&gt; 右移操作为有符号右移，即右移时会保持符号不变，所以左边会补1。而&gt;&gt;&gt;为 无符号右移。</li>
+<li>尝试使用&gt;&gt;&gt; 发现和原来结果一样</li>
+<li>继续查资料 发现&gt;&gt;&gt; 虽然是无符号的右移，但是byte类型的进行右移会默认转为32位int类型，然后进行无符号右移，再转换为byte。</li>
+<li>因为会转换为int类型，所以我们可以将原byte &amp; 0xff 把int的前24位置0，再进行右移，然后转为byte。完美解决</li>
+</ul>
+
+  </article>
+  <footer class="f-cf">
+    
+    
+      <a href="/2019/05/20/服务器热更/" class="link f-fr">服务器热更⟶</a>
+    
+  </footer>
+</section></div>
+    <footer id="footer" class="f-cf">
+  xlm10600@gmail.com
+  
+    
+      
+        · <a href="https://github.com/Sictiy" target="_blank" class="nav-icn">GitHub</a>
+      
+    
+      
+        · <a href="https://www.instagram.com/sictiy/" target="_blank" class="nav-icn">Instagram</a>
+      
+    
+      
+        · <a href="https://www.facebook.com/xml.xml.75" target="_blank" class="nav-icn">Facebook</a>
+      
+    
+  
+
+  <span class="copyright">All rights reserved @Sictiy Xu</span>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">&nbsp;&nbsp;访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+</footer>
+
+  </div>
+</body>
+</html>
