@@ -2,7 +2,7 @@
 title: 算法草稿本
 date: 2019-04-24 07:46:18
 tags: 
-categories: 
+categories: algorithm
 ---
 
 - 卡特兰数

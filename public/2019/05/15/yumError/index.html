@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="SictiyLeon">
 <meta property="og:description" content="问题1234567error: rpmdb: BDB0113 Thread/process 13173/139999979816768 failed: BDB1507 Thread died in Berkeley DB libraryerror: db5 error(-30973) from dbenv-&amp;gt;failchk: BDB0087 DB_RUNRECOVERY: Fatal err">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-15T09:47:31.940Z">
+<meta property="og:updated_time" content="2020-01-15T09:05:58.283Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="rpmdb:DBD0113">
 <meta name="twitter:description" content="问题1234567error: rpmdb: BDB0113 Thread/process 13173/139999979816768 failed: BDB1507 Thread died in Berkeley DB libraryerror: db5 error(-30973) from dbenv-&amp;gt;failchk: BDB0087 DB_RUNRECOVERY: Fatal err">
@@ -75,6 +75,7 @@
     <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">error: rpmdb: BDB0113 Thread/process 13173/139999979816768 failed: BDB1507 Thread died in Berkeley DB library</span><br><span class="line">error: db5 error(-30973) from dbenv-&gt;failchk: BDB0087 DB_RUNRECOVERY: Fatal error, run database recovery</span><br><span class="line">error: cannot open Packages index using db5 -  (-30973)</span><br><span class="line">error: cannot open Packages database in /var/lib/rpm</span><br><span class="line">CRITICAL:yum.main:</span><br><span class="line"></span><br><span class="line">Error: rpmdb open failed</span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="解决：重建数据库"><a href="#解决：重建数据库" class="headerlink" title="解决：重建数据库"></a>解决：重建数据库</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /var/lib/rpm</span><br><span class="line">ls</span><br><span class="line">rm -rf __db*</span><br><span class="line">rpm --rebuilddb</span><br></pre></td></tr></table></figure>
+
   </article>
   <footer class="f-cf">
     

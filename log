@@ -1,15 +1,2 @@
 INFO  Start processing
 INFO  Hexo is running at http://localhost:4000 . Press Ctrl+C to stop.
-URIError: URI malformed
-    at decodeURIComponent (<anonymous>)
-    at /home/sictiy/work/blog/node_modules/hexo-server/lib/middlewares/route.js:18:28
-    at call (/home/sictiy/work/blog/node_modules/connect/index.js:239:7)
-    at next (/home/sictiy/work/blog/node_modules/connect/index.js:183:5)
-    at /home/sictiy/work/blog/node_modules/hexo-server/lib/middlewares/header.js:9:5
-    at call (/home/sictiy/work/blog/node_modules/connect/index.js:239:7)
-    at next (/home/sictiy/work/blog/node_modules/connect/index.js:183:5)
-    at Function.handle (/home/sictiy/work/blog/node_modules/connect/index.js:186:3)
-    at Server.app (/home/sictiy/work/blog/node_modules/connect/index.js:51:37)
-    at Server.emit (events.js:189:13)
-    at parserOnIncoming (_http_server.js:676:12)
-    at HTTPParser.parserOnHeadersComplete (_http_common.js:109:17)

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Java Stream 理解 | SictiyLeon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述什么叫流Java 8 中的 Stream 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作，或者大批量数据操作 。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性.  与直接对集合类进行连续的一系列操作不同，使用流并非对集合类的所有元素进行一个操作之后得到中间集合再进行下一步的操作，而是针对流中的每">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Stream 理解">
+<meta property="og:url" content="http://yoursite.com/2020/01/15/stream/index.html">
+<meta property="og:site_name" content="SictiyLeon">
+<meta property="og:description" content="概述什么叫流Java 8 中的 Stream 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作，或者大批量数据操作 。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性.  与直接对集合类进行连续的一系列操作不同，使用流并非对集合类的所有元素进行一个操作之后得到中间集合再进行下一步的操作，而是针对流中的每">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lLT3Ed.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lLqMRI.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lO6LO1.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lLxrO1.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lOS9vd.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lO9lNV.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lLT9jU.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lLTujO.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lOAkhq.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lOV36K.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lOZ6v6.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lOeQsK.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lOmmTg.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lOm360.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lO01IJ.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lOS9vd.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/01/15/lLogne.png">
+<meta property="og:updated_time" content="2020-01-15T08:58:34.437Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Stream 理解">
+<meta name="twitter:description" content="概述什么叫流Java 8 中的 Stream 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作，或者大批量数据操作 。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性.  与直接对集合类进行连续的一系列操作不同，使用流并非对集合类的所有元素进行一个操作之后得到中间集合再进行下一步的操作，而是针对流中的每">
+<meta name="twitter:image" content="https://s2.ax1x.com/2020/01/15/lLT3Ed.png">
+  
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+</html>
+<body style="
+
+
+  background-color: #eff0f6
+
+">
+  <div id="container">
+    <nav id="nav">
+  <header class="header">
+    <a href="/" class="title">SictiyLeon</a>
+  </header>
+  <div class="ctnWrap">
+    <div class="icons">
+      
+        
+          
+            <a href="https://github.com/Sictiy" target="_blank" class="nav-icn iconfont icon-github"></a>
+          
+        
+          
+            <a href="https://www.instagram.com/sictiy/" target="_blank" class="nav-icn iconfont icon-instagram"></a>
+          
+        
+          
+            <a href="https://www.facebook.com/xml.xml.75" target="_blank" class="nav-icn iconfont icon-facebook"></a>
+          
+        
+      
+    </div>
+    <div class="menu">
+      
+        
+            <a href="/" class="nav-menu ">HOME</a>
+          
+        
+            <a href="/archives" class="nav-menu ">ARCHIVE</a>
+          
+        
+            <a href="/categories" class="nav-menu ">CATEGORIES</a>
+          
+        
+            <a href="/about" class="nav-menu ">ABOUT</a>
+          
+        
+      
+    </div>
+  </div>
+</nav>
+    <div id="main"><section class="article">
+  <h2 class="title">Java Stream 理解</h2>
+  <p class="sub">Jan 15, 2020</p>
+  <article class="content">
+    <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="什么叫流"><a href="#什么叫流" class="headerlink" title="什么叫流"></a>什么叫流</h3><p>Java 8 中的 Stream 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作，或者大批量数据操作 。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性.</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lLT3Ed.png" alt="stream-pipeline"></p>
+<p>与直接对集合类进行连续的一系列操作不同，使用流并非对集合类的所有元素进行一个操作之后得到中间集合再进行下一步的操作，而是针对流中的每一个元素按流的方向依次执行所有操作，不存在中间集合，所有的这些流式操作都在终端操作(如图中的ForEach)执行时才开始执行。</p>
+<h3 id="流的特点"><a href="#流的特点" class="headerlink" title="流的特点"></a>流的特点</h3><ul>
+<li>流管道由数据源、中间操作、终端操作组成。终端操作可以没有也可以有多个，数据源和终端操作只有一个。</li>
+<li>流不存储数据、流可能是无界的、流是可以被消耗的。流通过数据源不断生成单个元素，当整个流执行完终端操作之后流被标记成已消耗，无法再次执行终段操作。</li>
+<li>流的操作基本都是函数式接口的实例，中间操作的函数式操作是延迟执行的。</li>
+<li>流分为顺序执行和并行执行两种方式。并行执行依赖数据源Spliterator体验的并行遍历机制。</li>
+</ul>
+<h2 id="预备"><a href="#预备" class="headerlink" title="预备"></a>预备</h2><h3 id="Spliterator"><a href="#Spliterator" class="headerlink" title="Spliterator"></a>Spliterator</h3><p>Spliterator为Iterator的并行版本，提供对集合数据的并行遍历能力。</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lLqMRI.png" alt="stream-spliterator"></p>
+<p>这里主要依赖三个方法: tryAdvance, forEachRemaining, trySplit。</p>
+<ul>
+<li>tryAdvance 生成一个元素并对该元素执行传入的Consumer操作，返回的boolean值代表是否还可以继续生成下一个元素</li>
+<li>forEachRemaining 顾名思义该方法为对所有剩余生成的元素执行传入到的Consumer操作，该方法的默认实现为循环调用tryAdvance方法，直到其返回值为false。</li>
+<li>trySplit 该方法用于实现并行遍历。调用该方法后该Spliterator会拆分另一个Spliterator并返回，两个Spliterator可在两个线程中进行并行遍历。</li>
+</ul>
+<h3 id="Functor"><a href="#Functor" class="headerlink" title="Functor"></a>Functor</h3><p>Functor函子本是范畴论中的一个概念，指范畴间的一类映射。在函数式编程里，主要指对普通对象的封装，相对普通函数对简单对象进行操作映射，函子函数对高阶对象进行操作映射。</p>
+<p>可以通过一段示例代码进行理解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 函子</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> sictiy.xu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 2020/01/06 10:03</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Functor</span>&lt;<span class="title">T</span>, <span class="title">F</span> <span class="keyword">extends</span> <span class="title">Functor</span>&lt;?, ?&gt;&gt;</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    &lt;R&gt; <span class="function">F <span class="title">map</span><span class="params">(Function&lt;T, R&gt; f)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 通用函子</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> sictiy.xu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 2020/01/06 10:05</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommonFunctor</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Functor</span>&lt;<span class="title">T</span>, <span class="title">CommonFunctor</span>&lt;?&gt;&gt;</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CommonFunctor</span><span class="params">(T value)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;R&gt; <span class="function">CommonFunctor&lt;R&gt; <span class="title">map</span><span class="params">(Function&lt;T, R&gt; f)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> R result = f.apply(value);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CommonFunctor&lt;&gt;(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getValue</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> functor = <span class="keyword">new</span> CommonFunctor&lt;&gt;(<span class="number">10</span>);</span><br><span class="line">        LogUtil.info(<span class="string">"&#123;&#125;"</span>, functor.map(a -&gt; a + <span class="number">1</span>).map(a -&gt; a * <span class="number">10</span>).getValue());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函子接口Functor定义函子函数map，所有的函子都需要实现该接口。在实现类中，函子对象封装了普通对象T，而函子函数接收一个Function操作，该Function操作对普通对象T进行处理，结果为普通对象R。函子函数解析函子中封装的普通对象执行Function操作后将结果封装成新的函子对象。由于函子对象的map方法返回的是一个新的函子对象，所以可以连续的调用链式调用map方法直到调用getValue方法解析最后一个函子对象所封装的普通对象。该Functor虽然形式上与Stream一样，可以链式调用对象的方法，但是每一步调用依然是即时操作的，那如果对传入的操作并不马上操作，而是将传入的函数式接口通过对象属性或者保存在抽象方法的实现中，然后在最后需要获得结果的时候再统一处理所有的操作，是不是就是Stream实现的基本思想呢？</p>
+<h3 id="Stream基本用法"><a href="#Stream基本用法" class="headerlink" title="Stream基本用法"></a>Stream基本用法</h3><p><img src="https://s2.ax1x.com/2020/01/15/lO6LO1.png" alt="stream-op"></p>
+<p>Stream中的操作可以分为两大类：中间操作与结束操作，中间操作只是对操作进行了记录，只有结束操作才会触发实际的计算（即惰性求值），这也是Stream在迭代大集合时高效的原因之一。中间操作又可以分为无状态（Stateless）操作与有状态（Stateful）操作，前者是指元素的处理不受之前元素的影响；后者是指该操作只有拿到所有元素之后才能继续下去。结束操作又可以分为短路与非短路操作，这个应该很好理解，前者是指遇到某些符合条件的元素就可以得到最终结果；而后者是指必须处理所有元素才能得到最终结果。</p>
+<h2 id="流程原理"><a href="#流程原理" class="headerlink" title="流程原理"></a>流程原理</h2><h3 id="一个小栗子"><a href="#一个小栗子" class="headerlink" title="一个小栗子"></a>一个小栗子</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testStream</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    String[] words = &#123;<span class="string">"hello"</span>, <span class="string">"my"</span>, <span class="string">"world"</span>&#125;;</span><br><span class="line">    <span class="keyword">var</span> strStream = Arrays.stream(words);</span><br><span class="line">    <span class="keyword">var</span> tempStream = strStream.filter(word -&gt; word.length() &gt; <span class="number">3</span>)</span><br><span class="line">            .map(word -&gt; word.split(<span class="string">""</span>))</span><br><span class="line">            .flatMap(Arrays::stream)</span><br><span class="line">            .map(String::toUpperCase);</span><br><span class="line">    <span class="keyword">var</span> result = tempStream.reduce((a, b) -&gt; a + <span class="string">","</span> + b);</span><br><span class="line">    LogUtil.info(result.orElse(<span class="string">"null"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[2020-01-15 10:49:56:721] [INFO ] com.sictiy.jserver.Test.testStream(Test.java:44) H,E,L,L,O,W,O,R,L,D</span><br></pre></td></tr></table></figure>
+<p>先看一下通过Arrays.stream方法创建的Stream是什么样的：</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lLxrO1.png" alt="strStram"></p>
+<p>首先返回的strSteam是个***PipeLine$Head的实例，显然这是一个Stream的实现类，该类有一个属性sourceStage指向自己，有一个属性sourceSpliterator是根据传入的数组生成的一个ArraySpliterator实例。</p>
+<p>按Functor的思想，函子函数接收一个函数式接口应该返回另一个函子对象，那stream是怎么样的呢？再看一下filter函数里面是怎么实现的：</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lOS9vd.png" alt="filter"></p>
+<p>filter方法返回了一个叫做StatelessOp的Stream接口的实现，但在方法体内除了对传入的predicate进行空指针判断以外并没有进行其他的处理。返回的StatelessOp类重写了opWarpSink方法，而onWarpSink方法返回一个Sink接口，该Sink接口实现了accept方法，接收一个对象，如果满足predicate，则执行downstream的accept方法，这个sink可以理解为前一个操作调用该sink的accept接口，如果入参满足predicate，那继续调用下一个操作。我们已经知道了传入的predicate存放到的位置，但依然不知道这个sink什么时候使用，怎么使用。</p>
+<p>知道了增加一个中间操作做了什么以后，再看一下调用了一堆中间操作后返回到的tempStream是什么样的：</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lO9lNV.png" alt="tempStream"></p>
+<p>该Stream的结构很清晰，就是一个双向链表结构，所有的sourceStage指向最先生成的那个头，previousStage从最后生成的Stream一直往前指向头，而nextStage则从头往后一直指向最后一个Stream，结构是这样的：</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lLT9jU.png" alt="stage"></p>
+<p>到目前为止通过这个栗子把从创建的Head，到调用若干次中间操作后返回的StatelessOp的流程、以及最后返回的实例的整体结构都了解了一遍。</p>
+<h3 id="Stream族谱"><a href="#Stream族谱" class="headerlink" title="Stream族谱"></a>Stream族谱</h3><p><img src="https://s2.ax1x.com/2020/01/15/lLTujO.png" alt="stream-class"></p>
+<ul>
+<li>BaseStream类是所有Stream的基本接口，定义了是否并行，数据源，关闭回调等基本方法，Stream流继承了AutoCloseable接口不需要手动关闭。</li>
+<li>BaseStream有四个分支，其中Stream处理的元素为引用类型而另外三个分别处理int，lang，double三种基本类型的数据。</li>
+<li>AbstractPipeLine 定义了Stream双向链表的管道结构。</li>
+<li>PipeLineHelper 为管道辅助类，主要定义了一些终端操作中与计算相关的一些方法，比如WarpSink、copyInto等。</li>
+<li>***PipeLine里定义了Head StatelessOp StatefulOp 三种具体的实现类，初始的Stream为Head，中间操作后生成的根据操作的不同分为Stateless和StatefulOp</li>
+</ul>
+<h3 id="终端操作流程"><a href="#终端操作流程" class="headerlink" title="终端操作流程"></a>终端操作流程</h3><p>回到之前的小栗子，看双向链表结构的Pipeline是怎么通过warpSink组合不同的操作再讲操作运用到产生元素的Spliterator的。</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lOAkhq.png" alt="stream-reduce"></p>
+<p>终端操作reduce调用了***PipeLine的evaluate方法，传入了一个ReduceOps的实例。ReduceOps代表了reduce这种终端操作，是TerminalOp接口的一个实现。</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lOV36K.png" alt="stream-evaluatea"></p>
+<p>在evaluate方法里根据条件是否并行分别调用了 TerminalOp的并行计算与顺序计算方法，传入参数为类型为pipelinehelper的this本身，和产生元素的Spliterator。</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lOZ6v6.png" alt="stream-seqEvaluate" title="计算过程"><br><img src="https://s2.ax1x.com/2020/01/15/lOeQsK.png" alt="stream-makeSink" title="makeSink"><br><img src="https://s2.ax1x.com/2020/01/15/lOmmTg.png" alt="stream-warpSink" title="warpSink"><br><img src="https://s2.ax1x.com/2020/01/15/lOm360.png" alt="stream-copyInto" title="copyInto"></p>
+<p>以顺序执行为例，计算过程分为makeSink warpSink 和 copyInto 三个过程。</p>
+<ul>
+<li>makeSink由终端操作实例提供，生成第一个sink操作，代表整个操作流中的最后一个sink。</li>
+<li>warpSink 由 PipelineHelper提供，根据管道结构从最后一个中间操作开始不断往前调用***Pipeline的opWarpSink方法，将所有中间操作和终端操作进行组合，返回一个组合了所有操作的最终Sink。</li>
+<li>copyInto 同样由PipelineHelper提供，用于将生成的最终Sink应用于传入的Spliterator，使每一个元素依次执行这个Sink方法。</li>
+</ul>
+<h4 id="Sink"><a href="#Sink" class="headerlink" title="Sink"></a>Sink</h4><p>Sink是组合流管道流式操作的媒介，继承至Comsummer接口，可以对传入的元素进行一定的处理，Sink接口主要有以下方法：</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lO01IJ.png" alt="stream-sink"></p>
+<p>Sink有两种状态，初始状态和激活状态begin后进入激活状态，end后重新进入初始状态，accept方法只有在激活状态才能使用。Sink通过终端操作往前封装，后一个sink传入前一个Sink，保存在downStream属性中，每一个PipeLine 通过实现onWarpSink方法实现当前操作与下一步操作的封装，如下图，filter方法返回的Pipeline实现的opWarpSink方法返回当前操作的Sink，该Sink接收一个对象，如果对象满足predicate则将对象传递给downStream继续处理下一个操作：</p>
+<p><img src="https://s2.ax1x.com/2020/01/15/lOS9vd.png" alt="filter"></p>
+<h4 id="Stream的工作流程总览"><a href="#Stream的工作流程总览" class="headerlink" title="Stream的工作流程总览"></a>Stream的工作流程总览</h4><p><img src="https://s2.ax1x.com/2020/01/15/lLogne.png" alt="stream-all"></p>
+<h3 id="另一个栗子"><a href="#另一个栗子" class="headerlink" title="另一个栗子"></a>另一个栗子</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testStream</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    String[] words = &#123;<span class="string">"hello"</span>, <span class="string">"my"</span>, <span class="string">"world"</span>&#125;;</span><br><span class="line">    <span class="keyword">var</span> strStream = Arrays.stream(words);</span><br><span class="line">    <span class="keyword">var</span> tempStream = strStream.filter(word -&gt; word.length() &gt; <span class="number">3</span>)</span><br><span class="line">            .map(word -&gt; word.split(<span class="string">""</span>))</span><br><span class="line">            .flatMap(Arrays::stream)</span><br><span class="line">            .distinct()</span><br><span class="line">            .map(String::toUpperCase)</span><br><span class="line">            .sorted();</span><br><span class="line">    <span class="keyword">var</span> result = tempStream.reduce((a, b) -&gt; a + <span class="string">","</span> + b);</span><br><span class="line">    LogUtil.info(result.orElse(<span class="string">"null"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[2020-01-15 14:55:01:444] [INFO ] com.sictiy.jserver.Test.testStream(Test.java:46) D,E,H,L,O,R,W</span><br></pre></td></tr></table></figure>
+<h4 id="有状态操作"><a href="#有状态操作" class="headerlink" title="有状态操作"></a>有状态操作</h4><p>当栗子里面加入了sorted和distinct两个中间操作后，原来的逻辑好像有了点问题。按原来的流程，所有操作组合成一个流式的Sink后，Spliterator生成序列的元素，依次通过Sink处理，各元素之间相互不影响。但是当操作中出现有状态操作时，比如sorted需要依赖各个元素之间的大小关系，显然无法生成一个元素处理一个元素，那这种有状态操作又是如何处理的呢？通过观察第二个栗子的reduce执行步骤发现，整体流程依然没有变化，变化的只是双向链表的单个操作节点由StateleOp替换为了StatefulOp的实现类，比如sorted方法返回的是实现类SortedOps。我们已经知道不同操作节点之间的操作斜街是通过opWarpSink实现的，那有状态操作与无状态操作最大的不同肯定就在于opWarpSink了，来看一下该方法返回的是什么样的Sink：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * &#123;<span class="doctag">@link</span> Sink&#125; for implementing sort on reference streams.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">RefSortingSink</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractRefSortingSink</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;T&gt; list;</span><br><span class="line"></span><br><span class="line">    RefSortingSink(Sink&lt;? <span class="keyword">super</span> T&gt; sink, Comparator&lt;? <span class="keyword">super</span> T&gt; comparator) &#123;</span><br><span class="line">        <span class="keyword">super</span>(sink, comparator);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">begin</span><span class="params">(<span class="keyword">long</span> size)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (size &gt;= Nodes.MAX_ARRAY_SIZE)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(Nodes.BAD_SIZE);</span><br><span class="line">        list = (size &gt;= <span class="number">0</span>) ? <span class="keyword">new</span> ArrayList&lt;&gt;((<span class="keyword">int</span>) size) : <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">end</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        list.sort(comparator);</span><br><span class="line">        downstream.begin(list.size());</span><br><span class="line">        <span class="keyword">if</span> (!cancellationRequestedCalled) &#123;</span><br><span class="line">            list.forEach(downstream::accept);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (T t : list) &#123;</span><br><span class="line">                <span class="keyword">if</span> (downstream.cancellationRequested()) <span class="keyword">break</span>;</span><br><span class="line">                downstream.accept(t);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        downstream.end();</span><br><span class="line">        list = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">        list.add(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该Sink的accept方法接收一个元素后并没有将这个元素继续往下传递，而是存放在list当中，当所有元素都生成完之后，copyInto方法中调用end方法，当end传递到sorted操作这一层的时候，先对list进行排序，然后依次对其中的元素调用downstream的accept方法向下传递，所有元素都处理完之后，再传递end方法的调用。相当于当元素流在操作管道中传递的时候，在这一步截断了，对所有元素排序后，继续依次往后传递。既然排序操作是这样的，那去重操作呢，再看一下：</p>
+<p>未排序的stream：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> Sink.ChainedReference&lt;T, T&gt;(sink) &#123;</span><br><span class="line">    Set&lt;T&gt; seen;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">begin</span><span class="params">(<span class="keyword">long</span> size)</span> </span>&#123;</span><br><span class="line">        seen = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        downstream.begin(-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">end</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        seen = <span class="keyword">null</span>;</span><br><span class="line">        downstream.end();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!seen.contains(t)) &#123;</span><br><span class="line">            seen.add(t);</span><br><span class="line">            downstream.accept(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>已排序的stream：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> Sink.ChainedReference&lt;T, T&gt;(sink) &#123;</span><br><span class="line">    <span class="keyword">boolean</span> seenNull;</span><br><span class="line">    T lastSeen;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">begin</span><span class="params">(<span class="keyword">long</span> size)</span> </span>&#123;</span><br><span class="line">        seenNull = <span class="keyword">false</span>;</span><br><span class="line">        lastSeen = <span class="keyword">null</span>;</span><br><span class="line">        downstream.begin(-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">end</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        seenNull = <span class="keyword">false</span>;</span><br><span class="line">        lastSeen = <span class="keyword">null</span>;</span><br><span class="line">        downstream.end();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!seenNull) &#123;</span><br><span class="line">                seenNull = <span class="keyword">true</span>;</span><br><span class="line">                downstream.accept(lastSeen = <span class="keyword">null</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (lastSeen == <span class="keyword">null</span> || !t.equals(lastSeen)) &#123;</span><br><span class="line">            downstream.accept(lastSeen = t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>显然该Sink就可以达到去重的目的，当Stream是已排序的时，重复元素只可能连续出现，只需要与上一次传入的元素对比，如果相同则已处理过重复元素直接丢弃；当Stream时未排序的时，将已处理的元素记录在set中，当下次接收到相同元素时丢弃。所谓有状态，即时在当前操作处理一个元素之后需要记录某些信息，决定后面的元素的操作，而这种机制就是依靠Sink来实现的，不同的操作实现不同的opWarpSink，返回不同的Sink，Sink中可以记录某些信息来实现有状态。</p>
+
+  </article>
+  <footer class="f-cf">
+    
+      <a href="/2020/01/15/charMatch/" class="link f-fl">⟵字符串匹配</a>
+    
+    
+      <a href="/2019/09/20/dig/" class="link f-fr">炮弹挖坑问题⟶</a>
+    
+  </footer>
+</section></div>
+    <footer id="footer" class="f-cf">
+  xlm10600@gmail.com
+  
+    
+      
+        · <a href="https://github.com/Sictiy" target="_blank" class="nav-icn">GitHub</a>
+      
+    
+      
+        · <a href="https://www.instagram.com/sictiy/" target="_blank" class="nav-icn">Instagram</a>
+      
+    
+      
+        · <a href="https://www.facebook.com/xml.xml.75" target="_blank" class="nav-icn">Facebook</a>
+      
+    
+  
+
+  <span class="copyright">All rights reserved @Sictiy Xu</span>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">&nbsp;&nbsp;访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+</footer>
+
+  </div>
+</body>
+</html>

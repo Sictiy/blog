@@ -25,8 +25,10 @@ categories=""
 sed -i '1,/---/d' ${filePath}
 
 # 添加分类标签
-if [ $# -eq 3 ]; then
+if [ $# -ge 2 ]; then
     categories=${2}
+fi
+if [ $# -ge 3 ]; then
     tags=${3}
 fi
 

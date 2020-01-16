@@ -2,7 +2,7 @@
 title: Spider存储引擎尝试
 date: 2019-05-16 06:33:00
 tags: 
-categories: 
+categories: server
 ---
 
 ## 安装

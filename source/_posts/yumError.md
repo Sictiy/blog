@@ -2,7 +2,7 @@
 title: rpmdb:DBD0113
 date: 2019-05-15 09:47:31
 tags: 
-categories: 
+categories: server
 ---
 
 ## 问题
