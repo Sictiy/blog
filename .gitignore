@@ -4,3 +4,4 @@ posts/*.md
 db.json
 source/
 node_modules/
+*.log

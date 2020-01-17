@@ -1,4 +1,4 @@
 #!/bin/bash
 hexo generate 
 #hexo deploy 
-hexo server > ./log 2>&1 &
+hexo server > ./hexo.log 2>&1 &
