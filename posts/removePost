@@ -1,0 +1,4 @@
+#!/bin/bash
+cd ../
+rm ./posts/${1} 
+rm ./source/_posts/${1}

@@ -1,0 +1,6 @@
+public/
+.deploy_git/
+posts/*.md
+db.json
+source/
+node_modules/
