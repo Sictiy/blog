@@ -4,7 +4,7 @@
 
 # Site
 title: SictiyLeon
-subtitle:
+subtitle: 柠檬派
 description:
 keywords:
 author: sictiy xu
@@ -13,8 +13,8 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://www.sictiy.cn/blog
-root: /blog/
+url: https://www.sictiy.cn/hblog
+root: /hblog/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
@@ -79,7 +79,7 @@ theme: material-x
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: git@github.com:Sictiy/blog.git
+  repository: git@github.com:Sictiy/hblog.git
   #repository: https://github.com/Sictiy/blog.git
   #branch: master
   branch: gh-pages
