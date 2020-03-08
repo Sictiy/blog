@@ -1,3 +1,4 @@
 #! /bin/bash
-./stop.sh
+#./stop.sh
+./kill-all hexo
 ./start.sh

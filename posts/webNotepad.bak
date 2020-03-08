@@ -1,0 +1,286 @@
+<!--
+ * @Author: sictiy xu
+ * @Date: 2020-03-06 17:09:36
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-03-07 14:27:58
+ * @Description: file content
+ -->
+
+# 在线记事本折腾小记
+
+---
+
+每次在微信公众号里面看到某个链接想要用电脑打开的时候，总是需要先在电脑登录微信，然后把链接用微信的文件传输助手发送给自己。次数多了总觉得麻烦，于是想找一找有没有一种方便的可以直接通过浏览器直接同步的方式。
+
+---
+
+## notepa.cc
+
+### 简化版
+
+---
+
+一番搜索后找到了这个简化版的在线记事本网站，在手机上输入网址后分配了一个后缀，将信息输入后，再电脑上打开同样带后缀的网址，看到的信息同手机上一样，复制粘贴，很ok。地址如下：
+
+- github地址：
+- demo：
+
+简化版直接根据github上面给的说明，将代码clone到nginx的目录下面，修改nginx的配置即可，非常简单。nginx的配置如下：
+
+```txt
+location ~* \.php$ {
+    fastcgi_index   index.php;
+    fastcgi_pass    127.0.0.1:9000;
+    include         fastcgi_params;
+    fastcgi_param   SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+    fastcgi_param   SCRIPT_NAME        $fastcgi_script_name;
+}
+
+# notes目录进入主页，生成随机码
+location /notes {
+    index index.php;
+}
+
+# 带随机码的将随机码带入参数
+location ~* ^/notes/([a-zA-Z0-9_-]+)$ {
+    try_files $uri /notes/index.php?note=$1;
+}
+
+```
+
+### 原版
+
+在找到这个网址的帖子里有很多小伙伴都在自己的服务器上部署了，一一点进去方向都一样的，大家都说部署很简单，进github一看就知道，确实简单。但是在最后有一个哥们提问有没有可以实时同步的，不需要手机端编辑后，电脑端需要手动刷新才能看到最新的内容。并贴出了notepad.cc的github地址，说跟这种类似的，但需要文档完备。这个文档太简单，部署麻烦。于是我就进去clone了一份下来，尝试在自己vps上部署，确实很麻烦，一番操作后终于可以顺利通过域名进入主页了，但是同步好像还是有点问题，可能某个nodejs插件没有安装好。最终放弃...
+
+## 使用WebSocket+editor.md实现实时同步+markdown文档编辑。
+
+---
+
+### WebSocket
+
+---
+
+随意一搜就可以出现一大堆类似的简单示例，例如：[参考链接](https://www.cnblogs.com/xdp-gacl/p/5193279.html "websocket")， 客户端js通过ws协议的链接new一个websocket实例就可以通过这个实例与服务器进行数据交互，服务器通过注解的方式，处理客户端的连接消息的接收回调等，参考文档里可下载示例直接编译运行。
+
+### editor.md
+
+---
+
+editor.md是一个开源在线markdown编辑器，地址为:[editor.md](https://pandao.github.io/editor.md/ "editor.md"),。[源码](https://github.com/pandao/editor.md)目录下的[examples](https://github.com/pandao/editor.md/tree/master/examples)下有很多示例，常用的用法基本都可以在这里找到；进入[主页](https://pandao.github.io/editor.md/)后通过  使用示例 就可以看到源码示例中的例子对应的效果。
+
+只需要在页面中加入编辑器的标签就可以将编辑器嵌入页面中：
+
+```html
+<div id="test-editor"></div>
+
+```
+
+链接需要的样式：
+
+```html
+<link rel="stylesheet" href="/editormd/css/editormd.css" />
+<link rel="stylesheet" href="/editormd/examples/css/style.css" />
+
+```
+
+导入需要的js脚本：
+
+```html
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.js"></script>
+<script src="/js/editormd.js"></script>
+
+```
+
+### 结合使用
+
+---
+
+#### url带tag参数
+
+通过目录，或者url参数的形式确定访问的参数，所有同参数的url访问得到相同的文本。具体实现为：
+
+获取url中的参数：
+
+ ```javascript
+function getTag() {
+    let tagTemp  = window.location.pathname.substr(1);
+    if (tagTemp == null || tagTemp === ''){
+        return getUrlQueryString('tag');
+    }
+    return tagTemp;
+}
+
+function getUrlQueryString(names, urls) {
+    urls = urls || window.location.href;
+    urls && urls.indexOf("?") > -1 ? urls = urls
+        .substring(urls.indexOf("?") + 1) : "";
+    let reg = new RegExp("(^|&)" + names + "=([^&]*)(&|$)", "i");
+    let r = urls ? urls.match(reg) : window.location.search.substr(1)
+        .match(reg);
+    if (r != null && r[2] != "")
+        return unescape(r[2]);
+    return null;
+}
+
+ ```
+
+ 如果不带参数随机一个参数，重定向到新的url：
+
+ ```javascript
+let tag = getTag();
+if (tag == null)
+{
+    tag = randomString(5);
+    window.location.href = "?tag="+tag;
+    exit(0);
+}
+ ```
+
+服务端读取参数，相同参数的客户端连接放入同一组：
+
+```java
+@OnOpen
+public void onOpen(@PathParam("tag") String tag, Session session)
+{
+    this.session = session;
+    this.tag = tag;
+    var socketTestSet = groupSockets.computeIfAbsent(tag, k -> new CopyOnWriteArraySet<>());
+    socketTestSet.add(this);     //加入set中
+    LogUtil.info("new connect, tag:" + tag + ", current online:" + getOnlineCount(tag));
+}
+```
+
+#### 服务端通过tag处理文本内容的同步与存储
+
+服务端内存临时存储文本内容：
+
+```java
+private static Map<String, StringBuilder> groupString = new ConcurrentHashMap<>();
+```
+
+最终将文本内容存储在文件中：
+
+```java
+public static boolean writeFileString(String fileName, String content, boolean isAppend)
+{
+    try
+    {
+        File file = new File(fileName);
+        if (!file.getParentFile().exists())
+        {
+            if(!file.getParentFile().mkdirs())
+            {
+                return false;
+            }
+        }
+        RandomAccessFile accessFile = new RandomAccessFile(file, "rw");
+        accessFile.seek(isAppend ? file.length() : 0);
+        accessFile.write(content.getBytes(StandardCharsets.UTF_8));
+        accessFile.close();
+        LogUtil.info("write to file: " + fileName);
+        return true;
+    }
+    catch (IOException e)
+    {
+        LogUtil.exception(e);
+    }
+    return false;
+}
+```
+
+#### 服务端与各客户端同步文本
+
+客户端加载完且websocket连接完后向服务端请求已有的文本内容：
+
+```javascript
+if (hasInit < 0){
+    return
+}
+sendJson(1, '');
+
+```
+
+客户端editor.md 组件回调文本有改变时 将文本内容同步给服务器：
+
+```javascript
+onchange : function () {
+    if (isNew)
+    {
+        setMessageLog('Saving...');
+        sendMessage(this.getValue())
+    }
+    isNew = true;
+}
+
+```
+
+这里有个问题，当editor.md 组件设置为不实时预览时，onchange() 函数不会调用；需要找到editor.md源码里触发onchange()的地方，将onchange函数的调用，放到判断预览的外面：
+
+```javascript
+// if(settings.watch || (!settings.watch && state.preview))
+// {
+//     ...
+//     if (state.loaded) 
+//     {
+//         $.proxy(settings.onchange, this)();
+//     }
+// };
+// 修改为
+if(settings.watch || (!settings.watch && state.preview))
+{
+    // ...
+};
+if(state.loaded)
+{
+    $.proxy(settings.onchange, this)();
+}
+
+```
+
+服务端接收到最新的文本后，将文本转发给别的同tag参数的客户端，并缓存：
+
+```java
+//群发消息
+var webSocketSet = groupSockets.getOrDefault(tag, new HashSet<>());
+for (NotepadSocket item : webSocketSet)
+{
+    try
+    {
+        if (item == this)
+        {
+            item.sendMessage(message, SELF);
+        }
+        else
+        {
+            item.sendMessage(message, OTHERS);
+        }
+    }
+    catch (IOException e)
+    {
+        LogUtil.exception(e);
+    }
+}
+// 保存消息
+if (groupString.containsKey(tag))
+{
+    // 假设是追加
+    //            groupString.get(tag).append(message);
+    groupString.put(tag, new StringBuilder(message));
+}
+else
+{
+    groupString.put(tag, new StringBuilder(message));
+}
+// 需要修改为定时保存，而不是每一次收到更新就保存到文件
+if(!writeFileString(getMdPath() + tag, message, false))
+{
+    LogUtil.error("write to file failed! tag:{}, message:{}, path:{}", tag, message, getMdPath());
+}
+```
+
+### 完成
+
+---
+
+- 修改后的代码：[webNotepad](https://github.com/Sictiy/webNotepad "webNotepad")
+- 部署后的预览地址：[notepad.sictiy.cn](https://notepad.sictiy.cn/ "notepad")

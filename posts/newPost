@@ -14,6 +14,10 @@ cd ../
 echo "creating..."
 hexo new ${filename}
 
+# 创建md原文档备份
+echo "create md back file..."
+cp ${filePath} ./posts/${filename}.bak
+
 # 获取标题时间
 title=`cat ${filePath} |grep "#" -m 1|awk '{print $2}'`
 time=`date +%T`
@@ -23,6 +27,9 @@ categories=""
 
 # 删除第一个---号之前的所有行
 sed -i '1,/---/d' ${filePath}
+
+# 替换第一个## 前面的行里面的---
+sed -i '1,/##/s/---/<!--more-->/' ${filePath}
 
 # 添加分类标签
 if [ $# -ge 2 ]; then

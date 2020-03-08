@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then
+	echo "please input the thread name"
+	exit 1
+fi
+threadName=${1}
+echo "all thread contain ${threadName}"
+ps -aux | grep "${threadName}" |grep -v grep | grep -v "kill-all"
+read -p "kill?:" toKill
+if echo “${toKill}” | grep -qi "y"
+then
+	echo "start kill ${threadName} ..."
+	kill -9 `ps -aux | grep "${threadName}" | grep -v grep | grep -v "kill-all" | awk '{print $2}'`
+	echo "${threadName} killed ..."
+	ps -aux |grep "${threadName}" |grep -v grep | grep -v "kill-all"
+fi

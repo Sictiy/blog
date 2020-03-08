@@ -195,14 +195,18 @@ sidebar:
     icon: fas fa-thumbs-up
     title: 强烈推荐
     rows:
-      - name: Hexo脚本（Mac）
+      - name: Hexo脚本
         url: https://xaoxuu.com/wiki/hexo.sh/
-      - name: 图床脚本（Mac）
+      - name: 图床脚本
         url: https://xaoxuu.com/wiki/vim-cn.sh/
       - name: 图片在线压缩
         url: https://yasuotu.com
       - name: 生成Favicon
         url: https://realfavicongenerator.net
+      - name: 在线记事本(simple)
+        url: https://sictiy.cn/notes
+      - name: 在线记事本(markdown)
+        url: https://notepad.sictiy.cn
       #- name: 简历主题
       #  url: https://mxclub.github.io/resume/
 

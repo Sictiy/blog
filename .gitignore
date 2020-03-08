@@ -5,3 +5,4 @@ db.json
 source/
 node_modules/
 *.log
+*~
