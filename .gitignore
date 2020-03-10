@@ -1,6 +1,7 @@
 public/
 .deploy_git/
 posts/*.md
+posts/*.bak
 db.json
 source/
 node_modules/

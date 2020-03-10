@@ -11,8 +11,8 @@ filePath="./posts/${1}"
 
 # 新建文章
 cd ../
-echo "creating..."
-hexo new ${filename}
+echo "modify ..."
+#hexo new ${filename}
 
 # 创建md原文档临时副本
 echo "create md temp file ${filename}.temp ..."
