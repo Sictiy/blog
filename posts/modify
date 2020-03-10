@@ -5,14 +5,22 @@ if [ $# -lt 1 ]; then
    exit 1
 fi
 
+# 是否为创建新文档
+isnew=false
+
 filename=${1%.*}
 echo "filename ：${filename}"
 filePath="./posts/${1}"
 
 # 新建文章
 cd ../
-echo "modify ..."
-#hexo new ${filename}
+#if [ ${isnew} -ne 0 ] ; then
+if [ "${isnew}" = "true" ] ; then
+    echo "creating ..."
+    hexo new ${filename}
+else 
+    echo "modify ..."
+fi
 
 # 创建md原文档临时副本
 echo "create md temp file ${filename}.temp ..."
@@ -23,8 +31,19 @@ filePath="./posts/${filename}.temp"
 
 # 获取标题时间
 title=`cat ${filePath} |grep "#" -m 1|awk '{print $2}'`
-time=`date +%T`
-date=`date +%F`
+timeTemp=`date +%T`
+dateTemp=`date +%F`
+date="${dateTemp} ${timeTemp}"
+# 不是新创建的读bak文件
+#if [ ${isnew} -eq 0 ]; then
+if [ "${isnew}" != "true" ]; then
+    dateTemp=`awk '/date/ {printf("%s %s\n",$2,$3)}' ./posts/${filename}.bak | head -n 1`;
+    echo "read date from bak file, date: ${dateTemp}"
+    # 读到的日期不为空 替换掉当前时间
+    if [ -n "${dateTemp}" ] ; then
+        date="${dateTemp}"
+    fi
+fi
 tags=""
 categories=""
 
@@ -43,8 +62,9 @@ if [ $# -ge 3 ]; then
 fi
 
 # 替换插入
+echo "head info:"
 echo "title: ${title}"
-echo "date: ${date} ${time}"
+echo "date: ${date}"
 echo "tags: ${tags}"
 echo "categories: ${categories}"
 
