@@ -5,12 +5,18 @@ if [ $# -lt 1 ]; then
    exit 1
 fi
 
-# 是否为创建新文档
-isnew=true
-
 filename=${1%.*}
 echo "filename ：${filename}"
 filePath="./posts/${1}"
+
+# 是否为创建新文档
+isnew=false
+if [ ! -f "${filename}.bak" ];then
+    echo "${filename}.bak don\`t exist!"
+    isnew=true
+else
+    echo "${filename}.bak exist!"
+fi
 
 # 新建文章
 cd ../
