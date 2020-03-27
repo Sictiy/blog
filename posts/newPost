@@ -17,10 +17,8 @@ if [ ! -f "${filename}.bak" ];then
 else
     echo "${filename}.bak exist!"
 fi
-
 # 新建文章
 cd ../
-#if [ ${isnew} -ne 0 ] ; then
 if [ "${isnew}" = "true" ] ; then
     echo "creating ..."
     hexo new ${filename}
@@ -37,11 +35,16 @@ filePath="./posts/${filename}.temp"
 
 # 获取标题时间
 title=`cat ${filePath} |grep "#" -m 1|awk '{print $2}'`
+tags=""
+categories=""
+date=""
+
+# 获取当前时间作为默认时间
 timeTemp=`date +%T`
 dateTemp=`date +%F`
 date="${dateTemp} ${timeTemp}"
+
 # 不是新创建的读bak文件
-#if [ ${isnew} -eq 0 ]; then
 if [ "${isnew}" != "true" ]; then
     dateTemp=`awk '/date/ {printf("%s %s\n",$2,$3)}' ./posts/${filename}.bak | head -n 1`;
     echo "read date from bak file, date: ${dateTemp}"
@@ -49,23 +52,23 @@ if [ "${isnew}" != "true" ]; then
     if [ -n "${dateTemp}" ] ; then
         date="${dateTemp}"
     fi
+    categories=`awk '/categories/ {printf("%s\n",$2)}' ./posts/${filename}.bak | head -n 1`;
+    tags=`awk '/tags/ {printf("%s\n",$2)}' ./posts/${filename}.bak | head -n 1`;
 fi
-tags=""
-categories=""
 
-# 删除第一个---号之前的所有行
-sed -i '1,/---/d' ${filePath}
-
-# 替换第一个## 前面的行里面的---
-sed -i '1,/##/s/---/<!--more-->/' ${filePath}
-
-# 添加分类标签
+# 使用输入的分类标签
 if [ $# -ge 2 ]; then
     categories=${2}
 fi
 if [ $# -ge 3 ]; then
     tags=${3}
 fi
+
+# 删除第一个---号之前的所有行
+sed -i '1,/---/d' ${filePath}
+
+# 替换第一个## 前面的行里面的---
+sed -i '1,/##/s/---/<!--more-->/' ${filePath}
 
 # 替换插入
 echo "head info:"

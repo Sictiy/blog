@@ -204,7 +204,7 @@ sidebar:
       - name: 生成Favicon
         url: https://realfavicongenerator.net
       - name: 在线记事本(simple)
-        url: https://sictiy.cn/notes
+        url: https://notes.sictiy.cn
       - name: 在线记事本(markdown)
         url: https://notepad.sictiy.cn
       #- name: 简历主题
